@@ -54,6 +54,8 @@ int 0x10
 mov al, '!'
 int 0x10
 
+%include "boot_sect_print.asm"
+
 
 jmp $ 			; jump to current address => infinite loop
 
