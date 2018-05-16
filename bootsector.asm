@@ -1,3 +1,41 @@
+[org 0x7c00] ; tell the assembler that our offset is bootsector code
+
+mov bx, WELCOME
+call print
+
+call print_nl
+
+mov bx, KayOS
+call print
+
+call print_nl
+
+mov dx, 0x12fe
+call print_hex
+
+jmp $ 			; jump to current address => infinite loop
+
+
+; include subroutines
+%include "boot_sect_print.asm"
+%include "boot_sect_hex.asm"
+
+
+; Data
+
+WELCOME:
+    db 'Welcome to KayOS!', 0
+
+KayOS:
+    db 'The Greatest OS Everrr!!!', 0
+
+; Fill with 510 zeros minus the size of the previous code
+times 510-($-$$) db 0
+
+; Magic Number
+dw 0xaa55
+
+
 ; Infinite loop (e9 fd ff)
 ;loop:
 ;	jmp loop
@@ -5,63 +43,3 @@
 ; Data Register 32-bit data register: EAX
 ; EAX => 16-bit AX the primary accumulator: used in input/output and most arithmetic instructions
 ; AX => two 8-bit AH & AL
-mov ah, 0x0e	; tty mode
-mov al, 'H'
-int 0x10		; interupt
-mov al, 'e'
-int 0x10
-mov al, 'l'
-int 0x10
-int 0x10		; repeated 'l'
-mov al, 'o'
-int 0x10
-mov al, ','
-int 0x10		; interupt
-mov al, ' '
-int 0x10
-mov al, 'W'
-int 0x10
-mov al, 'e'
-int 0x10
-mov al, 'l'
-int 0x10
-mov al, 'c'
-int 0x10
-mov al, 'o'
-int 0x10
-mov al, 'm'
-int 0x10
-mov al, 'e'
-int 0x10
-mov al, ' '
-int 0x10
-mov al, 't'
-int 0x10
-mov al, 'o'
-int 0x10
-mov al, ' '
-int 0x10
-mov al, 'K'
-int 0x10
-mov al, 'a'
-int 0x10
-mov al, 'y'
-int 0x10
-mov al, 'O'
-int 0x10
-mov al, 'S'
-int 0x10
-mov al, '!'
-int 0x10
-
-%include "boot_sect_print.asm"
-
-
-jmp $ 			; jump to current address => infinite loop
-
-
-; Fill with 510 zeros minus the size of the previous code
-times 510-($-$$) db 0
-
-; Magic Number
-dw 0xaa55
